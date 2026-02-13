@@ -1,0 +1,6 @@
+com\smartvending\ProductTest.class
+com\smartvending\VendingMachineTest.class
+com\smartvending\TransactionTest.class
+com\smartvending\SelectProductBasisPathTest.class
+com\smartvending\ModelTests.class
+com\smartvending\AllTests.class

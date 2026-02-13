@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="tr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Product.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SmartVendingMachine</a> &gt; <a href="index.source.html" class="el_package">com.smartvending</a> &gt; <span class="el_source">Product.java</span></div><h1>Product.java</h1><pre class="source lang-java linenums">package com.smartvending;
+
+/**
+ * Represents a product in the vending machine.
+ * Contains product information including name, price, and stock quantity.
+ * Provides methods to manage stock levels and check availability.
+ */
+public class Product {
+    private String name;
+    private double price;
+    private int stock;
+    
+    /**
+     * Constructs a new Product with the specified name, price, and initial stock.
+     * 
+     * @param name the name of the product
+     * @param price the price of the product (must be positive)
+     * @param stock the initial stock quantity (must be non-negative)
+     * @throws IllegalArgumentException if price is negative or stock is negative
+     */
+<span class="nc" id="L21">    public Product(String name, double price, int stock) {</span>
+<span class="nc bnc" id="L22" title="All 2 branches missed.">        if (price &lt; 0) {</span>
+<span class="nc" id="L23">            throw new IllegalArgumentException(&quot;Price cannot be negative&quot;);</span>
+        }
+<span class="nc bnc" id="L25" title="All 2 branches missed.">        if (stock &lt; 0) {</span>
+<span class="nc" id="L26">            throw new IllegalArgumentException(&quot;Stock cannot be negative&quot;);</span>
+        }
+<span class="nc bnc" id="L28" title="All 4 branches missed.">        if (name == null || name.trim().isEmpty()) {</span>
+<span class="nc" id="L29">            throw new IllegalArgumentException(&quot;Product name cannot be null or empty&quot;);</span>
+        }
+        
+<span class="nc" id="L32">        this.name = name.trim();</span>
+<span class="nc" id="L33">        this.price = price;</span>
+<span class="nc" id="L34">        this.stock = stock;</span>
+<span class="nc" id="L35">    }</span>
+    
+    /**
+     * Reduces the stock quantity by 1.
+     * 
+     * @throws IllegalStateException if the product is out of stock
+     */
+    public void reduceStock() {
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        if (stock &lt;= 0) {</span>
+<span class="nc" id="L44">            throw new IllegalStateException(&quot;Cannot reduce stock: product is out of stock&quot;);</span>
+        }
+<span class="nc" id="L46">        stock--;</span>
+<span class="nc" id="L47">    }</span>
+    
+    /**
+     * Restocks the product with the specified quantity.
+     * 
+     * @param quantity the amount to add to stock (must be positive)
+     * @throws IllegalArgumentException if quantity is not positive
+     */
+    public void restock(int quantity) {
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        if (quantity &lt;= 0) {</span>
+<span class="nc" id="L57">            throw new IllegalArgumentException(&quot;Restock quantity must be positive&quot;);</span>
+        }
+<span class="nc" id="L59">        stock += quantity;</span>
+<span class="nc" id="L60">    }</span>
+    
+    /**
+     * Checks if the product is available (has stock &gt; 0).
+     * 
+     * @return true if the product is available, false otherwise
+     */
+    public boolean isAvailable() {
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        return stock &gt; 0;</span>
+    }
+    
+    /**
+     * Gets the name of the product.
+     * 
+     * @return the product name
+     */
+    public String getName() {
+<span class="nc" id="L77">        return name;</span>
+    }
+    
+    /**
+     * Gets the price of the product.
+     * 
+     * @return the product price
+     */
+    public double getPrice() {
+<span class="nc" id="L86">        return price;</span>
+    }
+    
+    /**
+     * Gets the current stock quantity.
+     * 
+     * @return the stock quantity
+     */
+    public int getStock() {
+<span class="nc" id="L95">        return stock;</span>
+    }
+    
+    /**
+     * Sets the price of the product.
+     * 
+     * @param price the new price (must be non-negative)
+     * @throws IllegalArgumentException if price is negative
+     */
+    public void setPrice(double price) {
+<span class="nc bnc" id="L105" title="All 2 branches missed.">        if (price &lt; 0) {</span>
+<span class="nc" id="L106">            throw new IllegalArgumentException(&quot;Price cannot be negative&quot;);</span>
+        }
+<span class="nc" id="L108">        this.price = price;</span>
+<span class="nc" id="L109">    }</span>
+    
+    /**
+     * Returns a string representation of the product.
+     * 
+     * @return a string containing product name, price, and stock
+     */
+    @Override
+    public String toString() {
+<span class="nc" id="L118">        return String.format(&quot;Product{name='%s', price=%.2f, stock=%d}&quot;, </span>
+<span class="nc" id="L119">                           name, price, stock);</span>
+    }
+    
+    /**
+     * Checks if this product is equal to another object.
+     * Products are considered equal if they have the same name.
+     * 
+     * @param obj the object to compare
+     * @return true if the objects are equal, false otherwise
+     */
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

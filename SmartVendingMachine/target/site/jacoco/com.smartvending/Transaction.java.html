@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="tr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Transaction.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SmartVendingMachine</a> &gt; <a href="index.source.html" class="el_package">com.smartvending</a> &gt; <span class="el_source">Transaction.java</span></div><h1>Transaction.java</h1><pre class="source lang-java linenums">package com.smartvending;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+/**
+ * Represents a completed transaction in the vending machine.
+ * Contains information about the product purchased, amount paid, change given, and timestamp.
+ */
+public class Transaction {
+    private String productName;
+    private double amountPaid;
+    private double changeGiven;
+    private LocalDateTime date;
+    
+    /**
+     * Constructs a new Transaction with the specified details.
+     * 
+     * @param productName the name of the product purchased
+     * @param amountPaid the amount paid for the product
+     * @param changeGiven the change returned to the customer
+     * @param date the date and time of the transaction
+     * @throws IllegalArgumentException if any parameter is invalid
+     */
+<span class="nc" id="L25">    public Transaction(String productName, double amountPaid, double changeGiven, LocalDateTime date) {</span>
+<span class="nc bnc" id="L26" title="All 4 branches missed.">        if (productName == null || productName.trim().isEmpty()) {</span>
+<span class="nc" id="L27">            throw new IllegalArgumentException(&quot;Product name cannot be null or empty&quot;);</span>
+        }
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        if (amountPaid &lt; 0) {</span>
+<span class="nc" id="L30">            throw new IllegalArgumentException(&quot;Amount paid cannot be negative&quot;);</span>
+        }
+<span class="nc bnc" id="L32" title="All 2 branches missed.">        if (changeGiven &lt; 0) {</span>
+<span class="nc" id="L33">            throw new IllegalArgumentException(&quot;Change given cannot be negative&quot;);</span>
+        }
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (date == null) {</span>
+<span class="nc" id="L36">            throw new IllegalArgumentException(&quot;Transaction date cannot be null&quot;);</span>
+        }
+        
+<span class="nc" id="L39">        this.productName = productName.trim();</span>
+<span class="nc" id="L40">        this.amountPaid = amountPaid;</span>
+<span class="nc" id="L41">        this.changeGiven = changeGiven;</span>
+<span class="nc" id="L42">        this.date = date;</span>
+<span class="nc" id="L43">    }</span>
+    
+    /**
+     * Gets the name of the product purchased.
+     * 
+     * @return the product name
+     */
+    public String getProductName() {
+<span class="nc" id="L51">        return productName;</span>
+    }
+    
+    /**
+     * Gets the amount paid for the product.
+     * 
+     * @return the amount paid
+     */
+    public double getAmountPaid() {
+<span class="nc" id="L60">        return amountPaid;</span>
+    }
+    
+    /**
+     * Gets the change returned to the customer.
+     * 
+     * @return the change given
+     */
+    public double getChangeGiven() {
+<span class="nc" id="L69">        return changeGiven;</span>
+    }
+    
+    /**
+     * Gets the date and time of the transaction.
+     * 
+     * @return the transaction date
+     */
+    public LocalDateTime getDate() {
+<span class="nc" id="L78">        return date;</span>
+    }
+    
+    /**
+     * Gets the total amount inserted (amount paid + change given).
+     * 
+     * @return the total amount inserted
+     */
+    public double getTotalAmountInserted() {
+<span class="nc" id="L87">        return amountPaid + changeGiven;</span>
+    }
+    
+    /**
+     * Checks if this transaction resulted in change being given.
+     * 
+     * @return true if change was given, false otherwise
+     */
+    public boolean hasChange() {
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        return changeGiven &gt; 0;</span>
+    }
+    
+    /**
+     * Returns a formatted string representation of the transaction.
+     * 
+     * @return a formatted string containing transaction details
+     */
+    @Override
+    public String toString() {
+<span class="nc" id="L106">        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd HH:mm:ss&quot;);</span>
+<span class="nc" id="L107">        return String.format(&quot;Transaction{product='%s', amountPaid=%.2f, changeGiven=%.2f, date=%s}&quot;, </span>
+<span class="nc" id="L108">                           productName, amountPaid, changeGiven, date.format(formatter));</span>
+    }
+    
+    /**
+     * Returns a detailed string representation of the transaction for display.
+     * 
+     * @return a detailed formatted string
+     */
+    public String toDetailedString() {
+<span class="nc" id="L117">        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd HH:mm:ss&quot;);</span>
+<span class="nc" id="L118">        return String.format(&quot;Purchase: %s | Amount Paid: $%.2f | Change: $%.2f | Date: %s&quot;, </span>
+<span class="nc" id="L119">                           productName, amountPaid, changeGiven, date.format(formatter));</span>
+    }
+    
+    /**
+     * Checks if this transaction is equal to another object.
+     * Transactions are considered equal if they have the same product name, amount paid, and date.
+     * 
+     * @param obj the object to compare
+     * @return true if the objects are equal, false otherwise
+     */
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

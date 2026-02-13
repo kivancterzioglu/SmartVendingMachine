@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="tr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VendingMachine.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SmartVendingMachine</a> &gt; <a href="index.source.html" class="el_package">com.smartvending</a> &gt; <span class="el_source">VendingMachine.java</span></div><h1>VendingMachine.java</h1><pre class="source lang-java linenums">package com.smartvending;
+
+import java.util.*;
+import java.time.LocalDateTime;
+
+/**
+ * Represents a smart vending machine that manages products and handles transactions.
+ * Provides functionality to insert money, select products, and process purchases.
+ */
+public class VendingMachine {
+    private Map&lt;String, Product&gt; products;
+    private double currentBalance;
+    private List&lt;Transaction&gt; transactionHistory;
+    
+    /**
+     * Constructs a new VendingMachine with empty product list and zero balance.
+     */
+<span class="nc" id="L18">    public VendingMachine() {</span>
+<span class="nc" id="L19">        this.products = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L20">        this.currentBalance = 0.0;</span>
+<span class="nc" id="L21">        this.transactionHistory = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L22">    }</span>
+    
+    /**
+     * Adds a product to the vending machine.
+     * 
+     * @param product the product to add
+     * @throws IllegalArgumentException if product is null
+     */
+    public void addProduct(Product product) {
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        if (product == null) {</span>
+<span class="nc" id="L32">            throw new IllegalArgumentException(&quot;Product cannot be null&quot;);</span>
+        }
+<span class="nc" id="L34">        products.put(product.getName(), product);</span>
+<span class="nc" id="L35">    }</span>
+    
+    /**
+     * Inserts money into the vending machine.
+     * 
+     * @param amount the amount to insert (must be positive)
+     * @throws IllegalArgumentException if amount is not positive
+     */
+    public void insertMoney(double amount) {
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        if (amount &lt;= 0) {</span>
+<span class="nc" id="L45">            throw new IllegalArgumentException(&quot;Amount must be positive&quot;);</span>
+        }
+<span class="nc" id="L47">        currentBalance += amount;</span>
+<span class="nc" id="L48">    }</span>
+    
+    /**
+     * Selects a product for purchase and processes the transaction.
+     * 
+     * @param productName the name of the product to purchase
+     * @return a Transaction object representing the completed purchase
+     * @throws IllegalArgumentException if product name is null or empty
+     * @throws IllegalStateException if product is not available or insufficient funds
+     */
+    public Transaction selectProduct(String productName) {
+<span class="nc bnc" id="L59" title="All 4 branches missed.">        if (productName == null || productName.trim().isEmpty()) {</span>
+<span class="nc" id="L60">            throw new IllegalArgumentException(&quot;Product name cannot be null or empty&quot;);</span>
+        }
+        
+<span class="nc" id="L63">        Product product = products.get(productName.trim());</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (product == null) {</span>
+<span class="nc" id="L65">            throw new IllegalStateException(&quot;Product not found: &quot; + productName);</span>
+        }
+        
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (!product.isAvailable()) {</span>
+<span class="nc" id="L69">            throw new IllegalStateException(&quot;Product is out of stock: &quot; + productName);</span>
+        }
+        
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        if (currentBalance &lt; product.getPrice()) {</span>
+<span class="nc" id="L73">            throw new IllegalStateException(&quot;Insufficient funds. Required: &quot; + </span>
+<span class="nc" id="L74">                                          product.getPrice() + &quot;, Available: &quot; + currentBalance);</span>
+        }
+        
+        // Process the transaction
+<span class="nc" id="L78">        double amountPaid = product.getPrice();</span>
+<span class="nc" id="L79">        double change = currentBalance - amountPaid;</span>
+        
+        // Reduce stock and update balance
+<span class="nc" id="L82">        product.reduceStock();</span>
+<span class="nc" id="L83">        currentBalance = 0.0; // Reset balance after purchase</span>
+        
+        // Create and record transaction
+<span class="nc" id="L86">        Transaction transaction = new Transaction(productName, amountPaid, change, LocalDateTime.now());</span>
+<span class="nc" id="L87">        transactionHistory.add(transaction);</span>
+        
+<span class="nc" id="L89">        return transaction;</span>
+    }
+    
+    /**
+     * Gets the change from the current balance without making a purchase.
+     * 
+     * @return the current balance as change
+     */
+    public double getChange() {
+<span class="nc" id="L98">        double change = currentBalance;</span>
+<span class="nc" id="L99">        currentBalance = 0.0;</span>
+<span class="nc" id="L100">        return change;</span>
+    }
+    
+    /**
+     * Gets the current balance in the machine.
+     * 
+     * @return the current balance
+     */
+    public double getCurrentBalance() {
+<span class="nc" id="L109">        return currentBalance;</span>
+    }
+    
+    /**
+     * Gets a product by name.
+     * 
+     * @param productName the name of the product
+     * @return the Product object, or null if not found
+     */
+    public Product getProduct(String productName) {
+<span class="nc" id="L119">        return products.get(productName);</span>
+    }
+    
+    /**
+     * Gets all available products (products with stock &gt; 0).
+     * 
+     * @return a list of available products
+     */
+    public List&lt;Product&gt; getAvailableProducts() {
+<span class="nc" id="L128">        List&lt;Product&gt; available = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">        for (Product product : products.values()) {</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">            if (product.isAvailable()) {</span>
+<span class="nc" id="L131">                available.add(product);</span>
+            }
+<span class="nc" id="L133">        }</span>
+<span class="nc" id="L134">        return available;</span>
+    }
+    
+    /**
+     * Gets all products in the machine.
+     * 
+     * @return a list of all products
+     */
+    public List&lt;Product&gt; getAllProducts() {
+<span class="nc" id="L143">        return new ArrayList&lt;&gt;(products.values());</span>
+    }
+    
+    /**
+     * Gets the transaction history.
+     * 
+     * @return a list of all transactions
+     */
+    public List&lt;Transaction&gt; getTransactionHistory() {
+<span class="nc" id="L152">        return new ArrayList&lt;&gt;(transactionHistory);</span>
+    }
+    
+    /**
+     * Gets the total number of products in the machine.
+     * 
+     * @return the number of products
+     */
+    public int getProductCount() {
+<span class="nc" id="L161">        return products.size();</span>
+    }
+    
+    /**
+     * Checks if a product exists in the machine.
+     * 
+     * @param productName the name of the product
+     * @return true if the product exists, false otherwise
+     */
+    public boolean hasProduct(String productName) {
+<span class="nc" id="L171">        return products.containsKey(productName);</span>
+    }
+    
+    /**
+     * Removes a product from the machine.
+     * 
+     * @param productName the name of the product to remove
+     * @return the removed product, or null if not found
+     */
+    public Product removeProduct(String productName) {
+<span class="nc" id="L181">        return products.remove(productName);</span>
+    }
+    
+    /**
+     * Clears all products from the machine.
+     */
+    public void clearProducts() {
+<span class="nc" id="L188">        products.clear();</span>
+<span class="nc" id="L189">    }</span>
+    
+    /**
+     * Gets the total value of all products in stock.
+     * 
+     * @return the total inventory value
+     */
+    public double getTotalInventoryValue() {
+<span class="nc" id="L197">        double total = 0.0;</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">        for (Product product : products.values()) {</span>
+<span class="nc" id="L199">            total += product.getPrice() * product.getStock();</span>
+<span class="nc" id="L200">        }</span>
+<span class="nc" id="L201">        return total;</span>
+    }
+    
+    /**
+     * Returns a string representation of the vending machine.
+     * 
+     * @return a string containing machine status information
+     */
+    @Override
+    public String toString() {
+<span class="nc" id="L211">        return String.format(&quot;VendingMachine{products=%d, balance=%.2f, transactions=%d}&quot;, </span>
+<span class="nc" id="L212">                           products.size(), currentBalance, transactionHistory.size());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
