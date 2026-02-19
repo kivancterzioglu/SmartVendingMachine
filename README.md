@@ -178,7 +178,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## Author
 
-Your Name - [Your GitHub Profile](https://github.com/yourusername)
+Kıvanç Terzioğlu  https://github.com/kivancterzioglu
 
 ## Acknowledgments
 
